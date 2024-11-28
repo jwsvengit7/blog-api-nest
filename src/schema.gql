@@ -1,0 +1,74 @@
+# User Type and Queries
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  posts: [Post!]!
+  comments: [Comment!]!
+}
+
+type Query {
+  # Fetch all posts
+  posts: [Post!]!
+
+  # Fetch a single post with its comments
+  post(id: ID!): Post
+
+  # Fetch current user details
+  me: User
+}
+
+# Post Type and Queries
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  createdAt: String!
+  updatedAt: String!
+  author: User!
+  comments: [Comment!]!
+}
+
+# Comment Type
+type Comment {
+  id: ID!
+  content: String!
+  createdAt: String!
+  updatedAt: String!
+  author: User!
+  post: Post!
+}
+
+# Mutations for Posts, Comments, and Users
+type Mutation {
+  # User-related mutations
+  register(username: String!, email: String!, password: String!): User!
+  login(email: String!, password: String!): AuthPayload!
+
+  # Post-related mutations
+  createPost(title: String!, content: String!): Post!
+  updatePost(id: ID!, title: String, content: String): Post!
+  deletePost(id: ID!): Boolean!
+
+  # Comment-related mutations
+  addComment(postId: ID!, content: String!): Comment!
+  updateComment(id: ID!, content: String!): Comment!
+  deleteComment(id: ID!): Boolean!
+}
+
+# Authentication Payload
+type AuthPayload {
+  accessToken: String!
+  user: User!
+}
+
+# Input Types for Validation (Optional)
+input CreatePostInput {
+  title: String!
+  content: String!
+}
+
+input UpdatePostInput {
+  title: String
+  content: String
+}
