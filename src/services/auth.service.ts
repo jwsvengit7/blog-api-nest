@@ -33,11 +33,11 @@ export class AuthService {
     });
 
     await this.userRepository.save(user);
-
-    const payload = { username: user.username, sub: user.id };
-    const accessToken = this.jwtService.sign(payload);
-
-    return { access_token: accessToken };
+    //
+    // const payload = { username: user.username, sub: user.id };
+    // const accessToken = this.jwtService.sign(payload);
+    //
+    return { registerDto };
   }
   async validateUser(username: string, userPassword: string): Promise<any> {
     const user = await this.userRepository.findOne({ where: { username } });
@@ -60,9 +60,9 @@ export class AuthService {
     }
 
     const payload = { username: user.username, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    const accessToken = this.jwtService.sign(payload);
+
+    return { loginDto, accessToken };
   }
 
 
