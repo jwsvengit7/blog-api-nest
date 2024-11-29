@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -6,7 +6,12 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../domain/entity/User';
 import { RegisterDto } from '../domain/model/request/register.dto';
 import { LoginDto } from '../domain/model/request/login.dto';
-
+import {
+  Injectable,
+  BadRequestException,
+  ConflictException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 @Injectable()
 export class AuthService {
   constructor(
@@ -15,29 +20,44 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+
   async register(registerDto: RegisterDto): Promise<any> {
     const { username, email, password } = registerDto;
 
-    const existingUser = await this.userRepository.findOne({
-      where: [{ username }, { email }],
-    });
-    if (existingUser) {
-      throw new Error('User with this username or email already exists');
+    try {
+      const existingUser = await this.userRepository.findOne({
+        where: [{ username }, { email }],
+      });
+
+      if (existingUser) {
+        throw new ConflictException(
+          'User with this username or email already exists',
+        );
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+
+      const user = this.userRepository.create({
+        username,
+        email,
+        password: hashedPassword,
+      });
+      await this.userRepository.save(user);
+
+      return {
+        message: 'User registered successfully',
+        user: { username, email },
+      };
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        'An error occurred while registering the user',
+      );
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = this.userRepository.create({
-      username,
-      email,
-      password: hashedPassword,
-    });
-
-    await this.userRepository.save(user);
-    //
-    // const payload = { username: user.username, sub: user.id };
-    // const accessToken = this.jwtService.sign(payload);
-    //
-    return { registerDto };
   }
   async validateUser(username: string, userPassword: string): Promise<any> {
     const user = await this.userRepository.findOne({ where: { username } });
@@ -49,7 +69,7 @@ export class AuthService {
       return null;
     }
 
-    const { password, ...result } = user;
+    const { ...result } = user;
     return result;
   }
 
@@ -62,7 +82,12 @@ export class AuthService {
     const payload = { username: user.username, sub: user.id };
     const accessToken = this.jwtService.sign(payload);
 
-    return { loginDto, accessToken };
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      accessToken,
+    };
   }
 
 
