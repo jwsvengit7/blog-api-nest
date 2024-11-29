@@ -16,7 +16,7 @@ export class UserResolver {
   @Mutation(() => User)
   async login(
     @Args('loginDto') loginDto: LoginDto,
-  ): Promise<{ access_token: string }> {
+  ): Promise<{ loginDto: LoginDto }> {
     return this.authService.login(loginDto);
   }
 }
