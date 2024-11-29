@@ -18,8 +18,8 @@ export class PostController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async createPost(@Body() createPostInput: CreatePostInput, @CurrentUser() user: User) {
-    return this.postService.create(createPostInput, user);
+  async createPost(@Body() createPostInput: CreatePostInput, @CurrentUser() author: User) {
+    return this.postService.createPost(createPostInput, author);
   }
 
   @Put(':id')
@@ -27,8 +27,8 @@ export class PostController {
   async updatePost(
     @Param('id') id: string,
     @Body() updatePostInput: UpdatePostInput,
-    @CurrentUser() user: User,
+    @CurrentUser() author: User,
   ) {
-    return this.postService.update(id, updatePostInput, user);
+    return this.postService.updatePost(id, updatePostInput, author);
   }
 }

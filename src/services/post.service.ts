@@ -18,7 +18,10 @@ export class PostService {
     return this.postRepository.findOne({ where: { id } });
   }
 
-  async create(createPostInput: CreatePostInput, author: User): Promise<Post> {
+  async createPost(
+    createPostInput: CreatePostInput,
+    author: User,
+  ): Promise<Post> {
     const post = this.postRepository.create({
       ...createPostInput,
       author,
@@ -26,7 +29,7 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
-  async update(
+  async updatePost(
     id: string,
     updatePostInput: UpdatePostInput,
     user: User,

@@ -20,19 +20,19 @@ export class PostResolver {
   @Mutation(() => Post)
   @UseGuards(JwtAuthGuard)
   async createPost(
-    @Args('createPostInput') createPostInput: CreatePostInput,
+    @Args('createPost') createPostInput: CreatePostInput,
     @CurrentUser() user: User,
   ) {
-    return this.postService.create(createPostInput, user);
+    return this.postService.createPost(createPostInput, user);
   }
 
   @Mutation(() => Post)
   @UseGuards(JwtAuthGuard)
   async updatePost(
     @Args('id') id: string,
-    @Args('updatePostInput') updatePostInput: UpdatePostInput,
+    @Args('updatePost') updatePostInput: UpdatePostInput,
     @CurrentUser() user: User,
   ) {
-    return this.postService.update(id, updatePostInput, user);
+    return this.postService.updatePost(id, updatePostInput, user);
   }
 }

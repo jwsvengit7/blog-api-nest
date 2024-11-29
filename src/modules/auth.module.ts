@@ -12,8 +12,7 @@ import { AuthService } from '../services/auth.service';
 import { JwtAuthGuard } from '../security/jwt-auth.guard';
 
 dotenv.config();
-const secret =
-  '404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970ARN304N39FR3NRF44';
+const secret = process.env.SECRET_KEY as string;
 
 @Module({
   imports: [

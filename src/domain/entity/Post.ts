@@ -1,10 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { User } from './User';
 import { Comment } from './Comment';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
+@ObjectType()
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn('uuid')
+  @Field(() => ID)
   id: string;
 
   @Column()
@@ -18,7 +21,7 @@ export class Post {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.posts)
   author: User;
 
