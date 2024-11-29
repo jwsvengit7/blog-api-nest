@@ -20,7 +20,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-
+  /**
+   * @returns The created user object along with additional metadata.
+   * @param registerDto
+   */
   async register(registerDto: RegisterDto): Promise<any> {
     const { username, email, password } = registerDto;
 
@@ -72,6 +75,10 @@ export class AuthService {
     const { ...result } = user;
     return result;
   }
+  /**
+   * @returns The created user object along with additional metadata.
+   * @param loginDto
+   */
 
   async login(loginDto: LoginDto) {
     const user = await this.validateUser(loginDto.username, loginDto.password);
