@@ -10,6 +10,7 @@ import { Comment } from '../domain/entity/Comment';
 import { AuthController } from '../controllers/auth.controller';
 import { AuthService } from '../services/auth.service';
 import { JwtAuthGuard } from '../security/jwt-auth.guard';
+import { UserResolver } from '../resolvers/user.resolver';
 
 dotenv.config();
 const secret = process.env.SECRET_KEY as string;
@@ -26,6 +27,6 @@ const secret = process.env.SECRET_KEY as string;
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JWTStartegy, JwtAuthGuard],
+  providers: [AuthService, JWTStartegy, JwtAuthGuard, UserResolver],
 })
 export class AuthModule {}

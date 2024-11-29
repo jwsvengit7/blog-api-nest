@@ -8,10 +8,7 @@ import { PostController } from '../controllers/post.controller';
 
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, Post]),
-
-  ],
+  imports: [TypeOrmModule.forFeature([User, Post])],
   controllers: [PostController],
   providers: [PostResolver, PostService],
 })

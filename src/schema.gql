@@ -51,7 +51,7 @@ type Mutation {
   deletePost(id: ID!): Boolean!
 
   # Comment-related mutations
-  addComment(postId: ID!, content: String!): Comment!
+  createComment(postId: ID!, content: String!): Comment!
   updateComment(id: ID!, content: String!): Comment!
   deleteComment(id: ID!): Boolean!
 }
