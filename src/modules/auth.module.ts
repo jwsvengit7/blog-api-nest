@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 
 import * as dotenv from 'dotenv';
-import { JWTStartegy } from '../security/jwt.strategy';
+import { JwtStrategy } from '../security/jwt.strategy';
 import { User } from '../domain/entity/User';
 import { Post } from '../domain/entity/Post';
 import { Comment } from '../domain/entity/Comment';
@@ -27,6 +27,6 @@ const secret = process.env.SECRET_KEY as string;
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JWTStartegy, JwtAuthGuard, UserResolver],
+  providers: [AuthService, JwtStrategy, JwtAuthGuard, UserResolver],
 })
 export class AuthModule {}

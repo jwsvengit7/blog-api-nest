@@ -22,7 +22,7 @@ export class Post {
   @UpdateDateColumn()
   updatedAt: Date;
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.posts, { eager: true, onDelete: 'CASCADE' })
   author: User;
 
   @OneToMany(() => Comment, (comment) => comment.post)

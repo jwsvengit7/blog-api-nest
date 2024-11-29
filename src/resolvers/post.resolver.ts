@@ -21,9 +21,9 @@ export class PostResolver {
   @UseGuards(JwtAuthGuard)
   async createPost(
     @Args('createPost') createPostInput: CreatePostInput,
-    @CurrentUser() user: User,
+    @CurrentUser() author: User,
   ) {
-    return this.postService.createPost(createPostInput, user);
+    return this.postService.createPost(createPostInput, author);
   }
 
   @Mutation(() => Post)
@@ -31,8 +31,8 @@ export class PostResolver {
   async updatePost(
     @Args('id') id: string,
     @Args('updatePost') updatePostInput: UpdatePostInput,
-    @CurrentUser() user: User,
+    @CurrentUser() author: User,
   ) {
-    return this.postService.updatePost(id, updatePostInput, user);
+    return this.postService.updatePost(id, updatePostInput, author);
   }
 }

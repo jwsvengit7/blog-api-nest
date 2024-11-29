@@ -1,20 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import * as dotenv from 'dotenv';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-dotenv.config();
-const secret = process.env.SECRET_KEY as string;
+import { JwtService } from '@nestjs/jwt';
+
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '../domain/entity/User';
+
 @Injectable()
-export class JWTStartegy extends PassportStrategy(Strategy) {
-  constructor() {
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor(
+    private readonly jwtService: JwtService,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: secret,
+      secretOrKey: process.env.SECRET_KEY,
     });
   }
-  async validate(payload: any) {
-    return { userId: payload.sub, username: payload.userEmail };
-  }
 
+  async validate(payload: any): Promise<User> {
+    const { sub } = payload;
+    const user = await this.userRepository.findOne({ where: { id: sub } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
+  }
 }
